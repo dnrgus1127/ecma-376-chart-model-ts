@@ -1,0 +1,17 @@
+{
+  "name": "chart-model",
+  "version": "0.1.0",
+  "description": "TypeScript class model for ECMA-376 DrawingML Chart (dml-chart.xsd and related DML shape property schemas)",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}
