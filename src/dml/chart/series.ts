@@ -30,14 +30,14 @@ import { CT_Trendline, CT_ErrBars } from "./trendline.js";
  */
 export abstract class SeriesBase extends OoxmlElement {
   /** `<c:idx>` CT_UnsignedInt — series index. */
-  get idx(): CT_UnsignedInt | undefined { return this.findChildren(CT_UnsignedInt)[0]; }
+  get idx(): CT_UnsignedInt | undefined { return this.findNthChild(CT_UnsignedInt, 0); }
   set idx(v: CT_UnsignedInt | undefined) {
     const prev = this.idx;
     if (prev) this.removeChild(prev);
     if (v) this.children.unshift(v);
   }
   /** `<c:order>` CT_UnsignedInt — display order. */
-  get order(): CT_UnsignedInt | undefined { return this.findChildren(CT_UnsignedInt)[1]; }
+  get order(): CT_UnsignedInt | undefined { return this.findNthChild(CT_UnsignedInt, 1); }
   set order(v: CT_UnsignedInt | undefined) {
     const prev = this.order;
     if (prev) this.removeChild(prev);

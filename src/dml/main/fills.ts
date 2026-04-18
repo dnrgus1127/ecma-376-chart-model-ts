@@ -15,10 +15,10 @@ import type {
   ST_BlipCompression,
   ST_Percentage,
   ST_PositiveFixedAngle,
-  ST_PositiveCoordinate,
+  ST_RectAlignment,
 } from "./simpleTypes.js";
 import type { ST_RelationshipId } from "../../shared/index.js";
-import { CT_Color, CT_ColorScheme, type ColorChoice } from "./colors.js";
+import { CT_Color, type ColorChoice } from "./colors.js";
 import { CT_RelativeRect, CT_Point2D } from "./transforms.js";
 
 /* ---------- Marker fills ---------- */
@@ -147,8 +147,8 @@ export class CT_TileInfoProperties extends OoxmlElement {
   set sy(v: ST_Percentage | undefined) { this.setAttr("sy", v); }
   get flip(): ST_TileFlipMode | undefined { return this.getAttr<ST_TileFlipMode>("flip"); }
   set flip(v: ST_TileFlipMode | undefined) { this.setAttr("flip", v); }
-  get algn(): string | undefined { return this.getAttr("algn"); }
-  set algn(v: string | undefined) { this.setAttr("algn", v); }
+  get algn(): ST_RectAlignment | undefined { return this.getAttr<ST_RectAlignment>("algn"); }
+  set algn(v: ST_RectAlignment | undefined) { this.setAttr("algn", v); }
 }
 
 /** CT_StretchInfoProperties — stretch rectangle for blip fills. */

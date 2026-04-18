@@ -221,37 +221,36 @@ export class CT_GroupShapeProperties extends OoxmlElement {
  * font style).
  *
  * The XSD models four named children (`lnRef`, `fillRef`, `effectRef`,
- * `fontRef`). Our single-slot container cannot distinguish them by type
- * alone, so the named accessors are implemented with a `tag` attribute.
+ * `fontRef`). Three of them share the same class (`CT_StyleMatrixReference`),
+ * so we keep a private side-channel map keyed by slot name instead of
+ * injecting a synthetic attribute into the model data.
  */
 export class CT_ShapeStyle extends OoxmlElement {
   get elementName() { return "style"; }
 
-  private getRef(slot: string): CT_StyleMatrixReference | undefined {
-    return this.findChildren(CT_StyleMatrixReference).find(r => r.getAttr("__slot") === slot);
-  }
+  private readonly refSlots = new Map<string, CT_StyleMatrixReference>();
+
   private setRef(slot: string, ref: CT_StyleMatrixReference | undefined) {
-    const prev = this.getRef(slot);
-    if (prev) this.removeChild(prev);
+    const prev = this.refSlots.get(slot);
+    if (prev) {
+      this.removeChild(prev);
+      this.refSlots.delete(slot);
+    }
     if (ref) {
-      ref.setAttr("__slot", slot);
+      this.refSlots.set(slot, ref);
       this.addChild(ref);
     }
   }
 
-  get lnRef(): CT_StyleMatrixReference | undefined { return this.getRef("lnRef"); }
+  get lnRef(): CT_StyleMatrixReference | undefined { return this.refSlots.get("lnRef"); }
   set lnRef(v: CT_StyleMatrixReference | undefined) { this.setRef("lnRef", v); }
-  get fillRef(): CT_StyleMatrixReference | undefined { return this.getRef("fillRef"); }
+  get fillRef(): CT_StyleMatrixReference | undefined { return this.refSlots.get("fillRef"); }
   set fillRef(v: CT_StyleMatrixReference | undefined) { this.setRef("fillRef", v); }
-  get effectRef(): CT_StyleMatrixReference | undefined { return this.getRef("effectRef"); }
+  get effectRef(): CT_StyleMatrixReference | undefined { return this.refSlots.get("effectRef"); }
   set effectRef(v: CT_StyleMatrixReference | undefined) { this.setRef("effectRef", v); }
 
   get fontRef(): CT_FontReference | undefined { return this.findChild(CT_FontReference); }
-  set fontRef(v: CT_FontReference | undefined) {
-    const prev = this.fontRef;
-    if (prev) this.removeChild(prev);
-    if (v) this.addChild(v);
-  }
+  set fontRef(v: CT_FontReference | undefined) { this.setSlot(CT_FontReference, v); }
 }
 
 /* ---------- Empty element / default definitions ---------- */

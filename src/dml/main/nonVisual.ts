@@ -8,16 +8,13 @@ import type { ST_DrawingElementId } from "./simpleTypes.js";
 
 /* ---------- Locking flag types (all pure-attribute) ---------- */
 
+/**
+ * Shared base for the six XSD locking types. Holds every flag the XSD
+ * may attach to any subclass; each concrete lock merely supplies its
+ * element name. Unused attributes on a given subclass simply remain
+ * `undefined` and are not serialized.
+ */
 abstract class LockingFlags extends OoxmlElement {
-  /** Shared locking attribute helpers. */
-  protected boolAttr(name: string, value?: boolean): boolean | undefined {
-    if (arguments.length > 1) this.setAttr(name, value);
-    return this.getAttr<boolean>(name);
-  }
-}
-
-export class CT_ShapeLocking extends LockingFlags {
-  get elementName() { return "spLocks"; }
   get noGrp(): boolean | undefined { return this.getAttr<boolean>("noGrp"); }
   set noGrp(v: boolean | undefined) { this.setAttr("noGrp", v); }
   get noSelect(): boolean | undefined { return this.getAttr<boolean>("noSelect"); }
@@ -38,116 +35,38 @@ export class CT_ShapeLocking extends LockingFlags {
   set noChangeArrowheads(v: boolean | undefined) { this.setAttr("noChangeArrowheads", v); }
   get noChangeShapeType(): boolean | undefined { return this.getAttr<boolean>("noChangeShapeType"); }
   set noChangeShapeType(v: boolean | undefined) { this.setAttr("noChangeShapeType", v); }
+}
+
+export class CT_ShapeLocking extends LockingFlags {
+  get elementName() { return "spLocks"; }
   get noTextEdit(): boolean | undefined { return this.getAttr<boolean>("noTextEdit"); }
   set noTextEdit(v: boolean | undefined) { this.setAttr("noTextEdit", v); }
 }
 
 export class CT_ConnectorLocking extends LockingFlags {
   get elementName() { return "cxnSpLocks"; }
-  get noGrp(): boolean | undefined { return this.getAttr<boolean>("noGrp"); }
-  set noGrp(v: boolean | undefined) { this.setAttr("noGrp", v); }
-  get noSelect(): boolean | undefined { return this.getAttr<boolean>("noSelect"); }
-  set noSelect(v: boolean | undefined) { this.setAttr("noSelect", v); }
-  get noRot(): boolean | undefined { return this.getAttr<boolean>("noRot"); }
-  set noRot(v: boolean | undefined) { this.setAttr("noRot", v); }
-  get noChangeAspect(): boolean | undefined { return this.getAttr<boolean>("noChangeAspect"); }
-  set noChangeAspect(v: boolean | undefined) { this.setAttr("noChangeAspect", v); }
-  get noMove(): boolean | undefined { return this.getAttr<boolean>("noMove"); }
-  set noMove(v: boolean | undefined) { this.setAttr("noMove", v); }
-  get noResize(): boolean | undefined { return this.getAttr<boolean>("noResize"); }
-  set noResize(v: boolean | undefined) { this.setAttr("noResize", v); }
-  get noEditPoints(): boolean | undefined { return this.getAttr<boolean>("noEditPoints"); }
-  set noEditPoints(v: boolean | undefined) { this.setAttr("noEditPoints", v); }
-  get noAdjustHandles(): boolean | undefined { return this.getAttr<boolean>("noAdjustHandles"); }
-  set noAdjustHandles(v: boolean | undefined) { this.setAttr("noAdjustHandles", v); }
-  get noChangeArrowheads(): boolean | undefined { return this.getAttr<boolean>("noChangeArrowheads"); }
-  set noChangeArrowheads(v: boolean | undefined) { this.setAttr("noChangeArrowheads", v); }
-  get noChangeShapeType(): boolean | undefined { return this.getAttr<boolean>("noChangeShapeType"); }
-  set noChangeShapeType(v: boolean | undefined) { this.setAttr("noChangeShapeType", v); }
 }
 
 export class CT_PictureLocking extends LockingFlags {
   get elementName() { return "picLocks"; }
-  get noGrp(): boolean | undefined { return this.getAttr<boolean>("noGrp"); }
-  set noGrp(v: boolean | undefined) { this.setAttr("noGrp", v); }
-  get noSelect(): boolean | undefined { return this.getAttr<boolean>("noSelect"); }
-  set noSelect(v: boolean | undefined) { this.setAttr("noSelect", v); }
-  get noRot(): boolean | undefined { return this.getAttr<boolean>("noRot"); }
-  set noRot(v: boolean | undefined) { this.setAttr("noRot", v); }
-  get noChangeAspect(): boolean | undefined { return this.getAttr<boolean>("noChangeAspect"); }
-  set noChangeAspect(v: boolean | undefined) { this.setAttr("noChangeAspect", v); }
-  get noMove(): boolean | undefined { return this.getAttr<boolean>("noMove"); }
-  set noMove(v: boolean | undefined) { this.setAttr("noMove", v); }
-  get noResize(): boolean | undefined { return this.getAttr<boolean>("noResize"); }
-  set noResize(v: boolean | undefined) { this.setAttr("noResize", v); }
-  get noEditPoints(): boolean | undefined { return this.getAttr<boolean>("noEditPoints"); }
-  set noEditPoints(v: boolean | undefined) { this.setAttr("noEditPoints", v); }
-  get noAdjustHandles(): boolean | undefined { return this.getAttr<boolean>("noAdjustHandles"); }
-  set noAdjustHandles(v: boolean | undefined) { this.setAttr("noAdjustHandles", v); }
-  get noChangeArrowheads(): boolean | undefined { return this.getAttr<boolean>("noChangeArrowheads"); }
-  set noChangeArrowheads(v: boolean | undefined) { this.setAttr("noChangeArrowheads", v); }
-  get noChangeShapeType(): boolean | undefined { return this.getAttr<boolean>("noChangeShapeType"); }
-  set noChangeShapeType(v: boolean | undefined) { this.setAttr("noChangeShapeType", v); }
   get noCrop(): boolean | undefined { return this.getAttr<boolean>("noCrop"); }
   set noCrop(v: boolean | undefined) { this.setAttr("noCrop", v); }
 }
 
 export class CT_GroupLocking extends LockingFlags {
   get elementName() { return "grpSpLocks"; }
-  get noGrp(): boolean | undefined { return this.getAttr<boolean>("noGrp"); }
-  set noGrp(v: boolean | undefined) { this.setAttr("noGrp", v); }
   get noUngrp(): boolean | undefined { return this.getAttr<boolean>("noUngrp"); }
   set noUngrp(v: boolean | undefined) { this.setAttr("noUngrp", v); }
-  get noSelect(): boolean | undefined { return this.getAttr<boolean>("noSelect"); }
-  set noSelect(v: boolean | undefined) { this.setAttr("noSelect", v); }
-  get noRot(): boolean | undefined { return this.getAttr<boolean>("noRot"); }
-  set noRot(v: boolean | undefined) { this.setAttr("noRot", v); }
-  get noChangeAspect(): boolean | undefined { return this.getAttr<boolean>("noChangeAspect"); }
-  set noChangeAspect(v: boolean | undefined) { this.setAttr("noChangeAspect", v); }
-  get noMove(): boolean | undefined { return this.getAttr<boolean>("noMove"); }
-  set noMove(v: boolean | undefined) { this.setAttr("noMove", v); }
-  get noResize(): boolean | undefined { return this.getAttr<boolean>("noResize"); }
-  set noResize(v: boolean | undefined) { this.setAttr("noResize", v); }
 }
 
 export class CT_GraphicalObjectFrameLocking extends LockingFlags {
   get elementName() { return "graphicFrameLocks"; }
-  get noGrp(): boolean | undefined { return this.getAttr<boolean>("noGrp"); }
-  set noGrp(v: boolean | undefined) { this.setAttr("noGrp", v); }
   get noDrilldown(): boolean | undefined { return this.getAttr<boolean>("noDrilldown"); }
   set noDrilldown(v: boolean | undefined) { this.setAttr("noDrilldown", v); }
-  get noSelect(): boolean | undefined { return this.getAttr<boolean>("noSelect"); }
-  set noSelect(v: boolean | undefined) { this.setAttr("noSelect", v); }
-  get noChangeAspect(): boolean | undefined { return this.getAttr<boolean>("noChangeAspect"); }
-  set noChangeAspect(v: boolean | undefined) { this.setAttr("noChangeAspect", v); }
-  get noMove(): boolean | undefined { return this.getAttr<boolean>("noMove"); }
-  set noMove(v: boolean | undefined) { this.setAttr("noMove", v); }
-  get noResize(): boolean | undefined { return this.getAttr<boolean>("noResize"); }
-  set noResize(v: boolean | undefined) { this.setAttr("noResize", v); }
 }
 
 export class CT_ContentPartLocking extends LockingFlags {
   get elementName() { return "cpLocks"; }
-  get noGrp(): boolean | undefined { return this.getAttr<boolean>("noGrp"); }
-  set noGrp(v: boolean | undefined) { this.setAttr("noGrp", v); }
-  get noSelect(): boolean | undefined { return this.getAttr<boolean>("noSelect"); }
-  set noSelect(v: boolean | undefined) { this.setAttr("noSelect", v); }
-  get noRot(): boolean | undefined { return this.getAttr<boolean>("noRot"); }
-  set noRot(v: boolean | undefined) { this.setAttr("noRot", v); }
-  get noChangeAspect(): boolean | undefined { return this.getAttr<boolean>("noChangeAspect"); }
-  set noChangeAspect(v: boolean | undefined) { this.setAttr("noChangeAspect", v); }
-  get noMove(): boolean | undefined { return this.getAttr<boolean>("noMove"); }
-  set noMove(v: boolean | undefined) { this.setAttr("noMove", v); }
-  get noResize(): boolean | undefined { return this.getAttr<boolean>("noResize"); }
-  set noResize(v: boolean | undefined) { this.setAttr("noResize", v); }
-  get noEditPoints(): boolean | undefined { return this.getAttr<boolean>("noEditPoints"); }
-  set noEditPoints(v: boolean | undefined) { this.setAttr("noEditPoints", v); }
-  get noAdjustHandles(): boolean | undefined { return this.getAttr<boolean>("noAdjustHandles"); }
-  set noAdjustHandles(v: boolean | undefined) { this.setAttr("noAdjustHandles", v); }
-  get noChangeArrowheads(): boolean | undefined { return this.getAttr<boolean>("noChangeArrowheads"); }
-  set noChangeArrowheads(v: boolean | undefined) { this.setAttr("noChangeArrowheads", v); }
-  get noChangeShapeType(): boolean | undefined { return this.getAttr<boolean>("noChangeShapeType"); }
-  set noChangeShapeType(v: boolean | undefined) { this.setAttr("noChangeShapeType", v); }
 }
 
 /* ---------- Hyperlink ---------- */

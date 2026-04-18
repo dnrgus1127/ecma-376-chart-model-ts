@@ -8,7 +8,8 @@
  */
 
 import { OoxmlElement, ListHolder } from "../../base/index.js";
-import { CT_ColorScheme, CT_Color, CT_CustomColorList } from "./colors.js";
+import { CT_ColorScheme, CT_CustomColorList } from "./colors.js";
+import type { ST_ColorSchemeIndex } from "./simpleTypes.js";
 import { CT_TextFont, CT_SupplementalFont } from "./text.js";
 import {
   CT_NoFillProperties,
@@ -214,30 +215,30 @@ export class CT_ClipboardStyleSheet extends OoxmlElement {
 
 export class CT_ColorMapping extends OoxmlElement {
   get elementName() { return "clrMap"; }
-  get bg1(): string | undefined { return this.getAttr("bg1"); }
-  set bg1(v: string | undefined) { this.setAttr("bg1", v); }
-  get tx1(): string | undefined { return this.getAttr("tx1"); }
-  set tx1(v: string | undefined) { this.setAttr("tx1", v); }
-  get bg2(): string | undefined { return this.getAttr("bg2"); }
-  set bg2(v: string | undefined) { this.setAttr("bg2", v); }
-  get tx2(): string | undefined { return this.getAttr("tx2"); }
-  set tx2(v: string | undefined) { this.setAttr("tx2", v); }
-  get accent1(): string | undefined { return this.getAttr("accent1"); }
-  set accent1(v: string | undefined) { this.setAttr("accent1", v); }
-  get accent2(): string | undefined { return this.getAttr("accent2"); }
-  set accent2(v: string | undefined) { this.setAttr("accent2", v); }
-  get accent3(): string | undefined { return this.getAttr("accent3"); }
-  set accent3(v: string | undefined) { this.setAttr("accent3", v); }
-  get accent4(): string | undefined { return this.getAttr("accent4"); }
-  set accent4(v: string | undefined) { this.setAttr("accent4", v); }
-  get accent5(): string | undefined { return this.getAttr("accent5"); }
-  set accent5(v: string | undefined) { this.setAttr("accent5", v); }
-  get accent6(): string | undefined { return this.getAttr("accent6"); }
-  set accent6(v: string | undefined) { this.setAttr("accent6", v); }
-  get hlink(): string | undefined { return this.getAttr("hlink"); }
-  set hlink(v: string | undefined) { this.setAttr("hlink", v); }
-  get folHlink(): string | undefined { return this.getAttr("folHlink"); }
-  set folHlink(v: string | undefined) { this.setAttr("folHlink", v); }
+  get bg1(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("bg1"); }
+  set bg1(v: ST_ColorSchemeIndex | undefined) { this.setAttr("bg1", v); }
+  get tx1(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("tx1"); }
+  set tx1(v: ST_ColorSchemeIndex | undefined) { this.setAttr("tx1", v); }
+  get bg2(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("bg2"); }
+  set bg2(v: ST_ColorSchemeIndex | undefined) { this.setAttr("bg2", v); }
+  get tx2(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("tx2"); }
+  set tx2(v: ST_ColorSchemeIndex | undefined) { this.setAttr("tx2", v); }
+  get accent1(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("accent1"); }
+  set accent1(v: ST_ColorSchemeIndex | undefined) { this.setAttr("accent1", v); }
+  get accent2(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("accent2"); }
+  set accent2(v: ST_ColorSchemeIndex | undefined) { this.setAttr("accent2", v); }
+  get accent3(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("accent3"); }
+  set accent3(v: ST_ColorSchemeIndex | undefined) { this.setAttr("accent3", v); }
+  get accent4(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("accent4"); }
+  set accent4(v: ST_ColorSchemeIndex | undefined) { this.setAttr("accent4", v); }
+  get accent5(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("accent5"); }
+  set accent5(v: ST_ColorSchemeIndex | undefined) { this.setAttr("accent5", v); }
+  get accent6(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("accent6"); }
+  set accent6(v: ST_ColorSchemeIndex | undefined) { this.setAttr("accent6", v); }
+  get hlink(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("hlink"); }
+  set hlink(v: ST_ColorSchemeIndex | undefined) { this.setAttr("hlink", v); }
+  get folHlink(): ST_ColorSchemeIndex | undefined { return this.getAttr<ST_ColorSchemeIndex>("folHlink"); }
+  set folHlink(v: ST_ColorSchemeIndex | undefined) { this.setAttr("folHlink", v); }
 }
 
 export class CT_ColorMappingOverride extends OoxmlElement {

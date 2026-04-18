@@ -7,7 +7,7 @@
  * get/set with TODO markers for the heavier sub-element work.
  */
 
-import { OoxmlElement, ValueElement, ChoiceHolder } from "../../base/index.js";
+import { OoxmlElement, ChoiceHolder } from "../../base/index.js";
 import type {
   ST_PositivePercentage,
   ST_PositiveFixedPercentage,
@@ -16,11 +16,11 @@ import type {
   ST_PresetShadowVal,
   ST_BlendMode,
   ST_PositiveCoordinate,
-  ST_Angle,
   ST_PositiveFixedAngle,
   ST_FixedAngle,
   ST_RectAlignment,
   ST_EffectContainerType,
+  ST_StyleMatrixColumnIndex,
 } from "./simpleTypes.js";
 import { ColorChoice } from "./colors.js";
 
@@ -250,14 +250,11 @@ export class CT_TransformEffect extends EffectBase {
 
 /* ---------- Effect referencing / composition ---------- */
 
-/**
- * CT_EffectReference — references an effect in the style matrix.
- * TODO: model `ref` attribute validation against ST_StyleMatrixColumnIndex.
- */
+/** CT_EffectReference — references an effect in the theme style matrix. */
 export class CT_EffectReference extends OoxmlElement {
   get elementName() { return "effectRef"; }
-  get ref(): string | undefined { return this.getAttr("ref"); }
-  set ref(v: string | undefined) { this.setAttr("ref", v); }
+  get ref(): ST_StyleMatrixColumnIndex | undefined { return this.getAttr<number>("ref"); }
+  set ref(v: ST_StyleMatrixColumnIndex | undefined) { this.setAttr("ref", v); }
 }
 
 export class CT_AlphaModulateEffect extends EffectBase {

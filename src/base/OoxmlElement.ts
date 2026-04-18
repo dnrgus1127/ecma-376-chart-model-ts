@@ -44,6 +44,39 @@ export abstract class OoxmlElement {
     return this.children.filter((c): c is T => c instanceof ctor);
   }
 
+  /**
+   * Return the nth child of the given type without allocating an intermediate
+   * array. Use this when an XSD sequence allows multiple occurrences of the
+   * same element type and the index is known (e.g., SeriesBase.idx/order).
+   */
+  findNthChild<T extends OoxmlElement>(
+    ctor: abstract new (...args: any[]) => T,
+    n: number,
+  ): T | undefined {
+    let seen = 0;
+    for (const c of this.children) {
+      if (c instanceof ctor) {
+        if (seen === n) return c;
+        seen++;
+      }
+    }
+    return undefined;
+  }
+
+  /**
+   * Replace the single child of type `ctor` with `v` (or remove if `v` is
+   * undefined). Convenience for the 3-line `const prev = this.findChild(...);
+   * if (prev) this.removeChild(prev); if (v) this.addChild(v);` pattern.
+   */
+  protected setSlot<T extends OoxmlElement>(
+    ctor: abstract new (...args: any[]) => T,
+    v: T | undefined,
+  ): void {
+    const prev = this.findChild(ctor);
+    if (prev) this.removeChild(prev);
+    if (v) this.addChild(v);
+  }
+
   getChildren(): readonly OoxmlElement[] {
     return this.children;
   }

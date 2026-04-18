@@ -235,12 +235,13 @@ export class CT_Area3DChart extends AreaLikeBase {
 
 /* ---------- Pie / pie3D / doughnut / pie-of-pie ---------- */
 
+/**
+ * Common base for flat-pie variants (pie, doughnut, of-pie). All three share
+ * the optional `firstSliceAng`; Pie3D does not use it but inheriting it is
+ * harmless — unset slots are not serialized.
+ */
 abstract class PieLikeBase extends ChartBase<CT_PieSer> {
   protected readonly seriesCtor = CT_PieSer;
-}
-
-export class CT_PieChart extends PieLikeBase {
-  get elementName() { return "pieChart"; }
   get firstSliceAng(): CT_FirstSliceAng | undefined { return this.findChild(CT_FirstSliceAng); }
   set firstSliceAng(v: CT_FirstSliceAng | undefined) {
     const prev = this.firstSliceAng;
@@ -248,16 +249,12 @@ export class CT_PieChart extends PieLikeBase {
     if (v) this.addChild(v);
   }
 }
+
+export class CT_PieChart extends PieLikeBase { get elementName() { return "pieChart"; } }
 export class CT_Pie3DChart extends PieLikeBase { get elementName() { return "pie3DChart"; } }
 
 export class CT_DoughnutChart extends PieLikeBase {
   get elementName() { return "doughnutChart"; }
-  get firstSliceAng(): CT_FirstSliceAng | undefined { return this.findChild(CT_FirstSliceAng); }
-  set firstSliceAng(v: CT_FirstSliceAng | undefined) {
-    const prev = this.firstSliceAng;
-    if (prev) this.removeChild(prev);
-    if (v) this.addChild(v);
-  }
   get holeSize(): CT_HoleSize | undefined { return this.findChild(CT_HoleSize); }
   set holeSize(v: CT_HoleSize | undefined) {
     const prev = this.holeSize;

@@ -10,7 +10,6 @@
 
 import { OoxmlElement, ChoiceHolder } from "../../base/index.js";
 import type {
-  ST_ColorSchemeIndex,
   ST_SchemeColorVal,
   ST_SystemColorVal,
   ST_PresetColorVal,
@@ -218,5 +217,3 @@ export class CT_ColorScheme extends OoxmlElement {
   add(entry: CT_Color) { this.addChild(entry); }
 }
 
-/** Ref key used in CT_ColorMapping and CT_ColorSchemeAndMapping attributes. */
-export type ColorMapVal = ST_ColorSchemeIndex;
