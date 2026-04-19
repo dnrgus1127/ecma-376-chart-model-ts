@@ -5,7 +5,7 @@
 
 import { OoxmlElement } from "../../base/index.js";
 import { CT_ShapeProperties, CT_OfficeArtExtensionList } from "../main/index.js";
-import { CT_Boolean, CT_MarkerSize, CT_MarkerStyleWrap } from "./wrappers.js";
+import { CT_Boolean, CT_MarkerSize, CT_MarkerStyleWrap, CT_UnsignedIntIdx } from "./wrappers.js";
 
 /** CT_Marker — data-point marker symbol + size + shape properties. */
 export class CT_Marker extends OoxmlElement {
@@ -51,8 +51,17 @@ export class CT_PictureOptions extends OoxmlElement {
 /** CT_DPt — single data-point formatting override. */
 export class CT_DPt extends OoxmlElement {
   get elementName() { return "dPt"; }
-  get idx(): number | undefined { return this.getAttr<number>("idx"); }
-  set idx(v: number | undefined) { this.setAttr("idx", v); }
+  /** `<c:idx val="N"/>` — CT_UnsignedInt child element, not an attribute. */
+  get idx(): number | undefined { return this.findChild(CT_UnsignedIntIdx)?.val; }
+  set idx(v: number | undefined) {
+    let node = this.findChild(CT_UnsignedIntIdx);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_UnsignedIntIdx(); this.addChild(node); }
+    node.val = v;
+  }
   /** invertIfNegative / bubble3D — CT_Boolean. TODO: name-aware. */
   get invertIfNegative(): CT_Boolean | undefined { return undefined; /* TODO */ }
   set invertIfNegative(_v: CT_Boolean | undefined) { /* TODO */ }

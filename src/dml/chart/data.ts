@@ -7,6 +7,7 @@
 import { OoxmlElement, ChoiceHolder, ListHolder } from "../../base/index.js";
 import type { ST_RelationshipId, ST_Xstring } from "../../shared/index.js";
 import { CT_OfficeArtExtensionList, CT_TextBody } from "../main/index.js";
+import { CT_V, CT_F, CT_FormatCode, CT_UnsignedIntPtCount } from "./wrappers.js";
 
 /* ---------- Numeric cache ---------- */
 
@@ -17,16 +18,42 @@ export class CT_NumVal extends OoxmlElement {
   get formatCode(): string | undefined { return this.getAttr("formatCode"); }
   set formatCode(v: string | undefined) { this.setAttr("formatCode", v); }
   /** `<c:v>` text content. */
-  get v(): string | undefined { return this.getAttr("v"); }
-  set v(value: string | undefined) { this.setAttr("v", value); }
+  get v(): string | undefined { return this.findChild(CT_V)?.text; }
+  set v(value: string | undefined) {
+    let node = this.findChild(CT_V);
+    if (value === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_V(); this.addChild(node); }
+    node.text = value;
+  }
 }
 
 export class CT_NumData extends OoxmlElement {
   get elementName() { return "numCache"; }
-  get formatCode(): string | undefined { return this.getAttr("formatCode"); }
-  set formatCode(v: string | undefined) { this.setAttr("formatCode", v); }
-  get ptCount(): number | undefined { return this.getAttr<number>("ptCount"); }
-  set ptCount(v: number | undefined) { this.setAttr("ptCount", v); }
+  /** `<c:formatCode>` — number-format string child element. */
+  get formatCode(): string | undefined { return this.findChild(CT_FormatCode)?.text; }
+  set formatCode(v: string | undefined) {
+    let node = this.findChild(CT_FormatCode);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_FormatCode(); this.addChild(node); }
+    node.text = v;
+  }
+  /** `<c:ptCount val="N"/>` — CT_UnsignedInt child element. */
+  get ptCount(): number | undefined { return this.findChild(CT_UnsignedIntPtCount)?.val; }
+  set ptCount(v: number | undefined) {
+    let node = this.findChild(CT_UnsignedIntPtCount);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_UnsignedIntPtCount(); this.addChild(node); }
+    node.val = v;
+  }
   get points(): CT_NumVal[] { return this.findChildren(CT_NumVal); }
   addPoint(p: CT_NumVal) { this.addChild(p); }
   get extLst(): CT_OfficeArtExtensionList | undefined { return this.findChild(CT_OfficeArtExtensionList); }
@@ -40,8 +67,16 @@ export class CT_NumData extends OoxmlElement {
 export class CT_NumRef extends OoxmlElement {
   get elementName() { return "numRef"; }
   /** The spreadsheet formula string (`<c:f>`). */
-  get f(): string | undefined { return this.getAttr("f"); }
-  set f(v: string | undefined) { this.setAttr("f", v); }
+  get f(): string | undefined { return this.findChild(CT_F)?.text; }
+  set f(v: string | undefined) {
+    let node = this.findChild(CT_F);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_F(); this.addChild(node); }
+    node.text = v;
+  }
   get numCache(): CT_NumData | undefined { return this.findChild(CT_NumData); }
   set numCache(v: CT_NumData | undefined) {
     const prev = this.numCache;
@@ -62,14 +97,32 @@ export class CT_StrVal extends OoxmlElement {
   get elementName() { return "pt"; }
   get idx(): number | undefined { return this.getAttr<number>("idx"); }
   set idx(v: number | undefined) { this.setAttr("idx", v); }
-  get v(): string | undefined { return this.getAttr("v"); }
-  set v(value: string | undefined) { this.setAttr("v", value); }
+  /** `<c:v>` text content. */
+  get v(): string | undefined { return this.findChild(CT_V)?.text; }
+  set v(value: string | undefined) {
+    let node = this.findChild(CT_V);
+    if (value === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_V(); this.addChild(node); }
+    node.text = value;
+  }
 }
 
 export class CT_StrData extends OoxmlElement {
   get elementName() { return "strCache"; }
-  get ptCount(): number | undefined { return this.getAttr<number>("ptCount"); }
-  set ptCount(v: number | undefined) { this.setAttr("ptCount", v); }
+  /** `<c:ptCount val="N"/>` — CT_UnsignedInt child element. */
+  get ptCount(): number | undefined { return this.findChild(CT_UnsignedIntPtCount)?.val; }
+  set ptCount(v: number | undefined) {
+    let node = this.findChild(CT_UnsignedIntPtCount);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_UnsignedIntPtCount(); this.addChild(node); }
+    node.val = v;
+  }
   get points(): CT_StrVal[] { return this.findChildren(CT_StrVal); }
   addPoint(p: CT_StrVal) { this.addChild(p); }
   get extLst(): CT_OfficeArtExtensionList | undefined { return this.findChild(CT_OfficeArtExtensionList); }
@@ -82,8 +135,16 @@ export class CT_StrData extends OoxmlElement {
 
 export class CT_StrRef extends OoxmlElement {
   get elementName() { return "strRef"; }
-  get f(): string | undefined { return this.getAttr("f"); }
-  set f(v: string | undefined) { this.setAttr("f", v); }
+  get f(): string | undefined { return this.findChild(CT_F)?.text; }
+  set f(v: string | undefined) {
+    let node = this.findChild(CT_F);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_F(); this.addChild(node); }
+    node.text = v;
+  }
   get strCache(): CT_StrData | undefined { return this.findChild(CT_StrData); }
   set strCache(v: CT_StrData | undefined) {
     const prev = this.strCache;
@@ -104,15 +165,32 @@ export class CT_Lvl extends ListHolder<CT_StrVal> { get elementName() { return "
 
 export class CT_MultiLvlStrData extends OoxmlElement {
   get elementName() { return "multiLvlStrCache"; }
-  get ptCount(): number | undefined { return this.getAttr<number>("ptCount"); }
-  set ptCount(v: number | undefined) { this.setAttr("ptCount", v); }
+  /** `<c:ptCount val="N"/>` — CT_UnsignedInt child element. */
+  get ptCount(): number | undefined { return this.findChild(CT_UnsignedIntPtCount)?.val; }
+  set ptCount(v: number | undefined) {
+    let node = this.findChild(CT_UnsignedIntPtCount);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_UnsignedIntPtCount(); this.addChild(node); }
+    node.val = v;
+  }
   get levels(): CT_Lvl[] { return this.findChildren(CT_Lvl); }
   add(lvl: CT_Lvl) { this.addChild(lvl); }
 }
 export class CT_MultiLvlStrRef extends OoxmlElement {
   get elementName() { return "multiLvlStrRef"; }
-  get f(): string | undefined { return this.getAttr("f"); }
-  set f(v: string | undefined) { this.setAttr("f", v); }
+  get f(): string | undefined { return this.findChild(CT_F)?.text; }
+  set f(v: string | undefined) {
+    let node = this.findChild(CT_F);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_F(); this.addChild(node); }
+    node.text = v;
+  }
   get multiLvlStrCache(): CT_MultiLvlStrData | undefined { return this.findChild(CT_MultiLvlStrData); }
   set multiLvlStrCache(v: CT_MultiLvlStrData | undefined) {
     const prev = this.multiLvlStrCache;
@@ -217,8 +295,16 @@ export class CT_SerTx extends OoxmlElement {
     if (v) this.addChild(v);
   }
   /** Literal series name (`<c:v>`). */
-  get v(): ST_Xstring | undefined { return this.getAttr("v"); }
-  set v(value: ST_Xstring | undefined) { this.setAttr("v", value); }
+  get v(): ST_Xstring | undefined { return this.findChild(CT_V)?.text; }
+  set v(value: ST_Xstring | undefined) {
+    let node = this.findChild(CT_V);
+    if (value === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_V(); this.addChild(node); }
+    node.text = value;
+  }
 }
 
 /* ---------- Relationship id / external data ---------- */

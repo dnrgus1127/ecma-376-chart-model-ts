@@ -6,7 +6,7 @@
  * just ValueElement specializations. They are collapsed here for brevity.
  */
 
-import { ValueElement } from "../../base/index.js";
+import { ValueElement, TextContentElement } from "../../base/index.js";
 import type {
   ST_Style,
   ST_RotX,
@@ -62,6 +62,31 @@ import type {
 export class CT_Boolean extends ValueElement<boolean> { get elementName() { return "b"; } }
 export class CT_Double extends ValueElement<number> { get elementName() { return "d"; } }
 export class CT_UnsignedInt extends ValueElement<number> { get elementName() { return "u"; } }
+
+/* ---------- Named CT_UnsignedInt wrappers (same XSD type, different element name) ---------- */
+
+/**
+ * Subclasses of CT_UnsignedInt that differ only in XML element name. They
+ * inherit from CT_UnsignedInt so callers using `findChild(CT_UnsignedInt)` on
+ * existing code paths continue to locate them via `instanceof`.
+ */
+/** `<c:idx val="N"/>` — used by CT_DPt, CT_DLbl, CT_BandFmt, CT_LegendEntry, CT_PivotFmt. */
+export class CT_UnsignedIntIdx extends CT_UnsignedInt { override get elementName() { return "idx"; } }
+/** `<c:ptCount val="N"/>` — used by CT_NumData / CT_StrData / CT_MultiLvlStrData. */
+export class CT_UnsignedIntPtCount extends CT_UnsignedInt { override get elementName() { return "ptCount"; } }
+/** `<c:fmtId val="N"/>` — used by CT_PivotSource / CT_PivotFmt. */
+export class CT_UnsignedIntFmtId extends CT_UnsignedInt { override get elementName() { return "fmtId"; } }
+
+/* ---------- Text-content wrappers (xsd:string / ST_Xstring elements) ---------- */
+
+/** `<c:v>text</c:v>` — literal string value inside CT_NumVal / CT_StrVal / CT_SerTx. */
+export class CT_V extends TextContentElement { get elementName() { return "v"; } }
+/** `<c:f>formula</c:f>` — spreadsheet formula reference inside CT_NumRef / CT_StrRef / CT_MultiLvlStrRef. */
+export class CT_F extends TextContentElement { get elementName() { return "f"; } }
+/** `<c:formatCode>...</c:formatCode>` — number-format string inside CT_NumData. */
+export class CT_FormatCode extends TextContentElement { get elementName() { return "formatCode"; } }
+/** `<c:name>...</c:name>` — used by CT_PivotSource (ST_Xstring) and CT_Trendline (xsd:string). */
+export class CT_Name extends TextContentElement { get elementName() { return "name"; } }
 
 /* ---------- 3D view wrappers ---------- */
 

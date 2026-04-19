@@ -5,7 +5,7 @@
 
 import { OoxmlElement } from "../../base/index.js";
 import { CT_ShapeProperties, CT_TextBody, CT_OfficeArtExtensionList } from "../main/index.js";
-import { CT_Boolean, CT_DispBlanksAs, CT_Style, CT_TextLanguageID } from "./wrappers.js";
+import { CT_Boolean, CT_DispBlanksAs, CT_Style, CT_TextLanguageID, CT_Name } from "./wrappers.js";
 import { CT_Title, CT_Legend } from "./labels.js";
 import { CT_PlotArea, CT_View3D, CT_Surface } from "./plotArea.js";
 import { CT_ExternalData } from "./data.js";
@@ -24,9 +24,17 @@ export class CT_PivotFmts extends OoxmlElement {
 
 export class CT_PivotSource extends OoxmlElement {
   get elementName() { return "pivotSource"; }
-  /** name — pivot source name string. */
-  get name(): string | undefined { return this.getAttr("name"); }
-  set name(v: string | undefined) { this.setAttr("name", v); }
+  /** `<c:name>` — pivot source name (ST_Xstring) child element. */
+  get name(): string | undefined { return this.findChild(CT_Name)?.text; }
+  set name(v: string | undefined) {
+    let node = this.findChild(CT_Name);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_Name(); this.addChild(node); }
+    node.text = v;
+  }
   /** fmtId — CT_UnsignedInt wrapper. TODO: typed child slot. */
 }
 

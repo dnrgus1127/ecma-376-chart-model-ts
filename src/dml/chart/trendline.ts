@@ -15,6 +15,7 @@ import {
   CT_ErrDir,
   CT_ErrValType,
   CT_GapAmount,
+  CT_Name,
 } from "./wrappers.js";
 import { CT_Layout } from "./labels.js";
 import { CT_Tx } from "./data.js";
@@ -67,9 +68,17 @@ export class CT_TrendlineLbl extends OoxmlElement {
 
 export class CT_Trendline extends OoxmlElement {
   get elementName() { return "trendline"; }
-  /** Trendline display name (`<c:name>` as CDATA). */
-  get name(): string | undefined { return this.getAttr("name"); }
-  set name(v: string | undefined) { this.setAttr("name", v); }
+  /** `<c:name>` — trendline display name (xsd:string) child element. */
+  get name(): string | undefined { return this.findChild(CT_Name)?.text; }
+  set name(v: string | undefined) {
+    let node = this.findChild(CT_Name);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_Name(); this.addChild(node); }
+    node.text = v;
+  }
 
   get spPr(): CT_ShapeProperties | undefined { return this.findChild(CT_ShapeProperties); }
   set spPr(v: CT_ShapeProperties | undefined) {

@@ -45,6 +45,47 @@ export abstract class OoxmlElement {
   }
 
   /**
+   * Locate the first child whose `elementName` matches `name` (and optionally
+   * also instanceof `ctor`). Required when the XSD reuses the same complex
+   * type under several element names (e.g., `<c:plotVisOnly>` and
+   * `<c:autoTitleDeleted>` both wrap CT_Boolean).
+   */
+  findChildByName<T extends OoxmlElement>(
+    name: string,
+    ctor?: abstract new (...args: any[]) => T,
+  ): T | undefined {
+    for (const c of this.children) {
+      if (c.elementName !== name) continue;
+      if (ctor && !(c instanceof ctor)) continue;
+      return c as T;
+    }
+    return undefined;
+  }
+
+  findChildrenByName<T extends OoxmlElement>(
+    name: string,
+    ctor?: abstract new (...args: any[]) => T,
+  ): T[] {
+    const out: T[] = [];
+    for (const c of this.children) {
+      if (c.elementName !== name) continue;
+      if (ctor && !(c instanceof ctor)) continue;
+      out.push(c as T);
+    }
+    return out;
+  }
+
+  /**
+   * Replace the single child matching `name` with `v` (or remove it if `v` is
+   * undefined). Name-aware counterpart to `setSlot()`.
+   */
+  protected setSlotByName<T extends OoxmlElement>(name: string, v: T | undefined): void {
+    const prev = this.findChildByName<T>(name);
+    if (prev) this.removeChild(prev);
+    if (v) this.addChild(v);
+  }
+
+  /**
    * Return the nth child of the given type without allocating an intermediate
    * array. Use this when an XSD sequence allows multiple occurrences of the
    * same element type and the index is known (e.g., SeriesBase.idx/order).
