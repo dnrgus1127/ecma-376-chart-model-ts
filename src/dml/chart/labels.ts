@@ -17,6 +17,7 @@ import {
   CT_Boolean,
   CT_DLblPos,
   CT_LegendPos,
+  CT_UnsignedIntIdx,
 } from "./wrappers.js";
 import { CT_Tx } from "./data.js";
 
@@ -168,8 +169,17 @@ export abstract class DLblSharedBase extends OoxmlElement {
 
 export class CT_DLbl extends DLblSharedBase {
   get elementName() { return "dLbl"; }
-  get idx(): number | undefined { return this.getAttr<number>("idx"); }
-  set idx(v: number | undefined) { this.setAttr("idx", v); }
+  /** `<c:idx val="N"/>` — CT_UnsignedInt child element, not an attribute. */
+  get idx(): number | undefined { return this.findChild(CT_UnsignedIntIdx)?.val; }
+  set idx(v: number | undefined) {
+    let node = this.findChild(CT_UnsignedIntIdx);
+    if (v === undefined) {
+      if (node) this.removeChild(node);
+      return;
+    }
+    if (!node) { node = new CT_UnsignedIntIdx(); this.addChild(node); }
+    node.val = v;
+  }
   /** `delete` boolean flag (wraps CT_Boolean). */
   get delete(): CT_Boolean | undefined { return this.findChild(CT_Boolean); }
   set delete(v: CT_Boolean | undefined) {

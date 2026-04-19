@@ -80,3 +80,75 @@ console.log("chart style val:", cs.style?.val);
 // Verify shared type aliases exist
 const lang: shared.ST_Lang = "ko-KR";
 console.log("lang:", lang);
+
+/* ---------- Round-trip checks for formerly mismodeled fields ---------- */
+
+// CT_NumRef.f / CT_NumData.formatCode / CT_NumData.ptCount / CT_NumVal.v
+const numRef = new chart.CT_NumRef();
+numRef.f = "Sheet1!$A$1:$A$3";
+const numData = new chart.CT_NumData();
+numData.formatCode = "0.00";
+numData.ptCount = 3;
+const pt0 = new chart.CT_NumVal();
+pt0.idx = 0; // attribute (correct)
+pt0.v = "1.5"; // now a child <c:v>
+numData.addPoint(pt0);
+numRef.numCache = numData;
+
+// Make sure values persist as child elements, not attributes.
+const roundtripF = numRef.f;
+const roundtripFmt = numRef.numCache?.formatCode;
+const roundtripPtCount = numRef.numCache?.ptCount;
+const roundtripV = numRef.numCache?.points[0]?.v;
+console.log("numRef.f:", roundtripF);
+console.log("numCache.formatCode:", roundtripFmt);
+console.log("numCache.ptCount:", roundtripPtCount);
+console.log("numVal.v:", roundtripV);
+
+// The <c:f>, <c:formatCode>, <c:ptCount>, <c:v> must live as children now.
+const fNode = numRef.getChildren().find((c) => c.elementName === "f");
+const fmtNode = numData.getChildren().find((c) => c.elementName === "formatCode");
+const ptCountNode = numData.getChildren().find((c) => c.elementName === "ptCount");
+const vNode = pt0.getChildren().find((c) => c.elementName === "v");
+console.log("f is a child element:", fNode !== undefined);
+console.log("formatCode is a child element:", fmtNode !== undefined);
+console.log("ptCount is a child element:", ptCountNode !== undefined);
+console.log("v is a child element:", vNode !== undefined);
+
+// idx should remain an attribute on CT_NumVal (per XSD).
+console.log("numVal.idx is attribute:", pt0.hasAttr("idx"));
+
+// CT_DPt.idx / CT_DLbl.idx — must be child CT_UnsignedInt, not attribute.
+const dPt = new chart.CT_DPt();
+dPt.idx = 5;
+console.log("dPt.idx round-trip:", dPt.idx);
+console.log("dPt.idx is child, not attr:", !dPt.hasAttr("idx") && dPt.getChildren().some((c) => c.elementName === "idx"));
+
+const dLbl = new chart.CT_DLbl();
+dLbl.idx = 2;
+console.log("dLbl.idx round-trip:", dLbl.idx);
+console.log("dLbl.idx is child, not attr:", !dLbl.hasAttr("idx") && dLbl.getChildren().some((c) => c.elementName === "idx"));
+
+// CT_PivotSource.name / CT_Trendline.name — child elements.
+const pivot = new chart.CT_PivotSource();
+pivot.name = "MyPivot";
+console.log("pivot.name round-trip:", pivot.name);
+console.log("pivot.name is child, not attr:", !pivot.hasAttr("name") && pivot.getChildren().some((c) => c.elementName === "name"));
+
+const trend = new chart.CT_Trendline();
+trend.name = "Linear (Series 1)";
+console.log("trend.name round-trip:", trend.name);
+console.log("trend.name is child, not attr:", !trend.hasAttr("name") && trend.getChildren().some((c) => c.elementName === "name"));
+
+// CT_SerTx.v and CT_StrRef.f should also work.
+const serTx = new chart.CT_SerTx();
+serTx.v = "My Series";
+console.log("serTx.v round-trip:", serTx.v);
+
+const strRef = new chart.CT_StrRef();
+strRef.f = "Sheet1!$A$1";
+console.log("strRef.f round-trip:", strRef.f);
+
+// Undefined assignment should remove the child element.
+pt0.v = undefined;
+console.log("numVal.v removed:", pt0.v === undefined && !pt0.getChildren().some((c) => c.elementName === "v"));
